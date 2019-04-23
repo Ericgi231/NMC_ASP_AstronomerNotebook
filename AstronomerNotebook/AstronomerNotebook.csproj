@@ -190,8 +190,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AstronomersController.cs" />
+    <Compile Include="Controllers\ClustersController.cs" />
+    <Compile Include="Controllers\GalaxiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\StarsController.cs" />
     <Compile Include="DAL\UniverseConfiguration.cs" />
     <Compile Include="DAL\UniverseContext.cs" />
     <Compile Include="DAL\UniverseInitializer.cs" />
@@ -201,10 +205,10 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Astronomer.cs" />
     <Compile Include="Models\Cluster.cs" />
+    <Compile Include="Models\Enum.cs" />
     <Compile Include="Models\Galaxy.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Observatory.cs" />
     <Compile Include="Models\Star.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -212,6 +216,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\dogstar.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -264,6 +269,26 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Stars\Create.cshtml" />
+    <Content Include="Views\Stars\Delete.cshtml" />
+    <Content Include="Views\Stars\Details.cshtml" />
+    <Content Include="Views\Stars\Edit.cshtml" />
+    <Content Include="Views\Stars\Index.cshtml" />
+    <Content Include="Views\Astronomers\Create.cshtml" />
+    <Content Include="Views\Astronomers\Delete.cshtml" />
+    <Content Include="Views\Astronomers\Details.cshtml" />
+    <Content Include="Views\Astronomers\Edit.cshtml" />
+    <Content Include="Views\Astronomers\Index.cshtml" />
+    <Content Include="Views\Clusters\Create.cshtml" />
+    <Content Include="Views\Clusters\Delete.cshtml" />
+    <Content Include="Views\Clusters\Details.cshtml" />
+    <Content Include="Views\Clusters\Edit.cshtml" />
+    <Content Include="Views\Clusters\Index.cshtml" />
+    <Content Include="Views\Galaxies\Create.cshtml" />
+    <Content Include="Views\Galaxies\Delete.cshtml" />
+    <Content Include="Views\Galaxies\Details.cshtml" />
+    <Content Include="Views\Galaxies\Edit.cshtml" />
+    <Content Include="Views\Galaxies\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

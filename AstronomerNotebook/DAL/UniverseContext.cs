@@ -22,7 +22,11 @@ namespace AstronomerNotebook.DAL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Star>()
+             .HasOptional(c => c.Astronomer);
+
+            modelBuilder.Entity<Star>()
+             .HasOptional(c => c.Cluster);
         }
 
     }

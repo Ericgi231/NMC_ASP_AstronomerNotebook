@@ -14,6 +14,7 @@ namespace AstronomerNotebook.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please enter a name for this astronomer.")]
+        [Display(Name = "Astronomer Name")]
         public string Name { get; set; }
 
         public virtual ICollection<Star> Stars { get; set; }

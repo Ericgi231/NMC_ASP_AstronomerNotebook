@@ -11,16 +11,20 @@ using AstronomerNotebook.Models;
 
 namespace AstronomerNotebook.Controllers
 {
+    [Authorize]
     public class GalaxiesController : Controller
     {
         private UniverseContext db = new UniverseContext();
 
+        [AllowAnonymous]
         // GET: Galaxies
         public ActionResult Index()
         {
-            return View(db.Galaxies.ToList());
+            var galaxies = db.Galaxies.Include(g => g.Astronomer);
+            return View(galaxies.ToList());
         }
 
+        [AllowAnonymous]
         // GET: Galaxies/Details/5
         public ActionResult Details(int? id)
         {
@@ -39,6 +43,7 @@ namespace AstronomerNotebook.Controllers
         // GET: Galaxies/Create
         public ActionResult Create()
         {
+            ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name");
             return View();
         }
 
@@ -47,7 +52,7 @@ namespace AstronomerNotebook.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Constellation,GalaxyType,ApparentMagnitude,RightAscension,Declination")] Galaxy galaxy)
+        public ActionResult Create([Bind(Include = "Id,Name,Constellation,GalaxyType,ApparentMagnitude,RightAscension,Declination,AstronomerId")] Galaxy galaxy)
         {
             if (ModelState.IsValid)
             {
@@ -56,6 +61,7 @@ namespace AstronomerNotebook.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", galaxy.AstronomerId);
             return View(galaxy);
         }
 
@@ -71,6 +77,7 @@ namespace AstronomerNotebook.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", galaxy.AstronomerId);
             return View(galaxy);
         }
 
@@ -79,7 +86,7 @@ namespace AstronomerNotebook.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Constellation,GalaxyType,ApparentMagnitude,RightAscension,Declination")] Galaxy galaxy)
+        public ActionResult Edit([Bind(Include = "Id,Name,Constellation,GalaxyType,ApparentMagnitude,RightAscension,Declination,AstronomerId")] Galaxy galaxy)
         {
             if (ModelState.IsValid)
             {
@@ -87,6 +94,7 @@ namespace AstronomerNotebook.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", galaxy.AstronomerId);
             return View(galaxy);
         }
 

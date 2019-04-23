@@ -8,20 +8,57 @@ using System.Web;
 using System.Web.Mvc;
 using AstronomerNotebook.DAL;
 using AstronomerNotebook.Models;
+using PagedList;
+using System.Data.Entity.Infrastructure;
 
 namespace AstronomerNotebook.Controllers
 {
+    [Authorize]
     public class StarsController : Controller
     {
         private UniverseContext db = new UniverseContext();
 
+        [AllowAnonymous]
         // GET: Stars
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            var stars = db.Stars.Include(s => s.Astronomer);
-            return View(stars.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.currentFilter = searchString;
+
+            var stars = from s in db.Stars select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                stars = stars.Where(s => s.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    stars = stars.OrderByDescending(s => s.Name);
+                    break;
+                default:
+                    stars = stars.OrderBy(s => s.Name);
+                    break;
+            }
+
+            int pageSize = 12;
+            int pageNumber = (page ?? 1);
+            return View(stars.ToPagedList(pageNumber, pageSize));
         }
 
+        [AllowAnonymous]
         // GET: Stars/Details/5
         public ActionResult Details(int? id)
         {
@@ -41,6 +78,7 @@ namespace AstronomerNotebook.Controllers
         public ActionResult Create()
         {
             ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name");
+            ViewBag.ClusterId = new SelectList(db.Clusters, "Id", "Name");
             return View();
         }
 
@@ -49,7 +87,7 @@ namespace AstronomerNotebook.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Constellation,ApparentMagnitude,RightAscension,Declination,AstronomerId")] Star star)
+        public ActionResult Create([Bind(Include = "Id,Name,Constellation,ApparentMagnitude,RightAscension,Declination,AstronomerId,ClusterId")] Star star)
         {
             if (ModelState.IsValid)
             {
@@ -59,6 +97,7 @@ namespace AstronomerNotebook.Controllers
             }
 
             ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", star.AstronomerId);
+            ViewBag.ClusterId = new SelectList(db.Clusters, "Id", "Name", star.ClusterId);
             return View(star);
         }
 
@@ -75,6 +114,7 @@ namespace AstronomerNotebook.Controllers
                 return HttpNotFound();
             }
             ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", star.AstronomerId);
+            ViewBag.ClusterId = new SelectList(db.Clusters, "Id", "Name", star.ClusterId);
             return View(star);
         }
 
@@ -83,7 +123,7 @@ namespace AstronomerNotebook.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Constellation,ApparentMagnitude,RightAscension,Declination,AstronomerId")] Star star)
+        public ActionResult Edit([Bind(Include = "Id,Name,Constellation,ApparentMagnitude,RightAscension,Declination,AstronomerId,ClusterId")] Star star)
         {
             if (ModelState.IsValid)
             {
@@ -92,6 +132,7 @@ namespace AstronomerNotebook.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", star.AstronomerId);
+            ViewBag.ClusterId = new SelectList(db.Clusters, "Id", "Name", star.ClusterId);
             return View(star);
         }
 

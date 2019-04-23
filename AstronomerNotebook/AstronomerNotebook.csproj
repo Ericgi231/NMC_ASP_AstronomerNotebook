@@ -56,6 +56,12 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -212,11 +218,15 @@
     <Compile Include="Models\Star.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AstronomerIndexData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\cluster.jpg" />
     <Content Include="Content\dogstar.jpg" />
+    <Content Include="Content\galaxy.jpg" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -274,11 +284,6 @@
     <Content Include="Views\Stars\Details.cshtml" />
     <Content Include="Views\Stars\Edit.cshtml" />
     <Content Include="Views\Stars\Index.cshtml" />
-    <Content Include="Views\Astronomers\Create.cshtml" />
-    <Content Include="Views\Astronomers\Delete.cshtml" />
-    <Content Include="Views\Astronomers\Details.cshtml" />
-    <Content Include="Views\Astronomers\Edit.cshtml" />
-    <Content Include="Views\Astronomers\Index.cshtml" />
     <Content Include="Views\Clusters\Create.cshtml" />
     <Content Include="Views\Clusters\Delete.cshtml" />
     <Content Include="Views\Clusters\Details.cshtml" />
@@ -289,6 +294,11 @@
     <Content Include="Views\Galaxies\Details.cshtml" />
     <Content Include="Views\Galaxies\Edit.cshtml" />
     <Content Include="Views\Galaxies\Index.cshtml" />
+    <Content Include="Views\Astronomers\Create.cshtml" />
+    <Content Include="Views\Astronomers\Delete.cshtml" />
+    <Content Include="Views\Astronomers\Details.cshtml" />
+    <Content Include="Views\Astronomers\Edit.cshtml" />
+    <Content Include="Views\Astronomers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -320,7 +330,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50771</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

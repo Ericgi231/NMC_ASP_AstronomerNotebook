@@ -8,19 +8,44 @@ using System.Web;
 using System.Web.Mvc;
 using AstronomerNotebook.DAL;
 using AstronomerNotebook.Models;
+using AstronomerNotebook.ViewModels;
+using System.Data.Entity.Infrastructure;
 
 namespace AstronomerNotebook.Controllers
 {
+    [Authorize]
     public class AstronomersController : Controller
     {
         private UniverseContext db = new UniverseContext();
 
+        [AllowAnonymous]
         // GET: Astronomers
-        public ActionResult Index()
+        public ActionResult Index(int? id, int? ClusterId)
         {
-            return View(db.Astronomers.ToList());
+            var viewModel = new AstronomerIndexData();
+            viewModel.Astronomers = db.Astronomers
+                .Include(i => i.Galaxies)
+                .Include(i => i.Clusters)
+                .Include(i => i.Stars);
+
+            if (id != null)
+            {
+                ViewBag.AstronomerID = id.Value;
+                viewModel.Clusters = viewModel.Astronomers.Where(
+                    i => i.Id == id.Value).Single().Clusters;
+            }
+
+            if (ClusterId != null)
+            {
+                ViewBag.ClusterID = ClusterId.Value;
+                viewModel.Stars = viewModel.Clusters.Where(
+                    x => x.Id == ClusterId).Single().Stars;
+            }
+
+            return View(viewModel);
         }
 
+        [AllowAnonymous]
         // GET: Astronomers/Details/5
         public ActionResult Details(int? id)
         {

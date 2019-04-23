@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AstronomerNotebook.Models.Astronomer>
+﻿@model AstronomerNotebook.ViewModels.AstronomerIndexData
 
 @{
     ViewBag.Title = "Index";
@@ -11,23 +11,119 @@
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
+        <th>Name</th>
+        <th>Galaxies</th>
+        <th>Clusters</th>
+        <th>Stars</th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model.Astronomers)
+    {
+        string selectedRow = "";
+        if (item.Id == ViewBag.InstructorID)
+        {
+            selectedRow = "success";
+        }
+        <tr class="@selectedRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+
+            <td>
+                @{
+                    foreach (var galaxy in item.Galaxies)
+                    {
+                        @galaxy.Name <br />
+                    }
+                }
+            </td>
+
+            <td>
+                @{
+                    foreach (var cluster in item.Clusters)
+                    {
+                        @cluster.Name <br />
+                    }
+                }
+            </td>
+
+            <td>
+                @{
+                    foreach (var star in item.Stars)
+                    {
+                        @star.Name <br />
+                    }
+                }
+            </td>
+
+            <td>
+                @Html.ActionLink("Select", "Index", new { id = item.Id }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>
+
+@if (Model.Clusters != null)
+{
+    <h3>
+        Clusters Discovered By Selected Astronomer
+    </h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Constellation</th>
+        </tr>
+        @foreach (var item in Model.Clusters)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("Select", "Index", new { ClusterId = item.Id })
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.ClusterType
+                </td>
+                <td>
+                    @item.Constellation
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@if (Model.Stars != null)
+{
+    <h3>
+        Stars Contained In Selected Cluster
+    </h3>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Right Ascension</th>
+            <th>Declination</th>
+        </tr>
+        @foreach (var item in Model.Stars)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.RightAscension
+                </td>
+                <td>
+                    @item.Declination
+                </td>
+            </tr>
+        }
+    </table>
+}

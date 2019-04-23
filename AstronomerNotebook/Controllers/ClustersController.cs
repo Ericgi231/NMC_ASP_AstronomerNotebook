@@ -11,16 +11,20 @@ using AstronomerNotebook.Models;
 
 namespace AstronomerNotebook.Controllers
 {
+    [Authorize]
     public class ClustersController : Controller
     {
         private UniverseContext db = new UniverseContext();
 
+        [AllowAnonymous]
         // GET: Clusters
         public ActionResult Index()
         {
-            return View(db.Clusters.ToList());
+            var clusters = db.Clusters.Include(c => c.Astronomer).Include(c => c.Galaxy);
+            return View(clusters.ToList());
         }
 
+        [AllowAnonymous]
         // GET: Clusters/Details/5
         public ActionResult Details(int? id)
         {
@@ -39,6 +43,8 @@ namespace AstronomerNotebook.Controllers
         // GET: Clusters/Create
         public ActionResult Create()
         {
+            ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name");
+            ViewBag.GalaxyId = new SelectList(db.Galaxies, "Id", "Name");
             return View();
         }
 
@@ -47,7 +53,7 @@ namespace AstronomerNotebook.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Constellation,ClusterType,ApparentMagnitude,RightAscension,Declination")] Cluster cluster)
+        public ActionResult Create([Bind(Include = "Id,Name,Constellation,ClusterType,ApparentMagnitude,RightAscension,Declination,AstronomerId,GalaxyId")] Cluster cluster)
         {
             if (ModelState.IsValid)
             {
@@ -56,6 +62,8 @@ namespace AstronomerNotebook.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", cluster.AstronomerId);
+            ViewBag.GalaxyId = new SelectList(db.Galaxies, "Id", "Name", cluster.GalaxyId);
             return View(cluster);
         }
 
@@ -71,6 +79,8 @@ namespace AstronomerNotebook.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", cluster.AstronomerId);
+            ViewBag.GalaxyId = new SelectList(db.Galaxies, "Id", "Name", cluster.GalaxyId);
             return View(cluster);
         }
 
@@ -79,7 +89,7 @@ namespace AstronomerNotebook.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Constellation,ClusterType,ApparentMagnitude,RightAscension,Declination")] Cluster cluster)
+        public ActionResult Edit([Bind(Include = "Id,Name,Constellation,ClusterType,ApparentMagnitude,RightAscension,Declination,AstronomerId,GalaxyId")] Cluster cluster)
         {
             if (ModelState.IsValid)
             {
@@ -87,6 +97,8 @@ namespace AstronomerNotebook.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", cluster.AstronomerId);
+            ViewBag.GalaxyId = new SelectList(db.Galaxies, "Id", "Name", cluster.GalaxyId);
             return View(cluster);
         }
 

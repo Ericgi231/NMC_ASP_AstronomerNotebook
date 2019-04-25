@@ -7,7 +7,7 @@ using System.Web;
 
 namespace AstronomerNotebook.DAL
 {
-    public class UniverseInitializer : DropCreateDatabaseAlways<UniverseContext>
+    public class UniverseInitializer : DropCreateDatabaseIfModelChanges<UniverseContext>
     {
         protected override void Seed(UniverseContext context)
         {

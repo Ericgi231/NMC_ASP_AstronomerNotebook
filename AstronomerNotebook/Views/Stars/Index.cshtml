@@ -14,23 +14,17 @@
 @using (Html.BeginForm("Index", "Stars", FormMethod.Get))
 {
     <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFiter as string)
+        @Html.TextBox("SearchString", ViewBag.CurrentFiter as string)
         <input type="submit" value="Search" />
     </p>
 }
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayName("Astronomer Name")
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayName("Cluster Name")
-        </th>
-        <th>
-            @Html.ActionLink("Star Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            @Html.DisplayName("Constellation")
+            @Html.ActionLink("Constellation", "Index", new { sortOrder = ViewBag.ConSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
             @Html.DisplayName("Apparent Magnitude")
@@ -41,18 +35,18 @@
         <th>
             @Html.DisplayName("Declination")
         </th>
+        <th>
+            @Html.DisplayName("Discovered By")
+        </th>
+        <th>
+            @Html.DisplayName("Parent Cluster")
+        </th>
         <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Astronomer.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cluster.Name)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -67,6 +61,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Declination)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Astronomer.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cluster.Name)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

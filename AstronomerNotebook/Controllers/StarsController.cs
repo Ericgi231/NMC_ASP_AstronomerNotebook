@@ -24,6 +24,7 @@ namespace AstronomerNotebook.Controllers
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.ConSortParm = sortOrder == "Constellation" ? "con_desc" : "Constellation";
 
             if (searchString != null)
             {
@@ -40,13 +41,19 @@ namespace AstronomerNotebook.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                stars = stars.Where(s => s.Name.Contains(searchString));
+                stars = stars.Where(s => s.Name.Contains(searchString) || s.Astronomer.Name.Contains(searchString) || s.Cluster.Name.Contains(searchString));
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
                     stars = stars.OrderByDescending(s => s.Name);
+                    break;
+                case "con_desc":
+                    stars = stars.OrderByDescending(s => s.Constellation);
+                    break;
+                case "Constellation":
+                    stars = stars.OrderBy(s => s.Constellation);
                     break;
                 default:
                     stars = stars.OrderBy(s => s.Name);
@@ -89,15 +96,23 @@ namespace AstronomerNotebook.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,Constellation,ApparentMagnitude,RightAscension,Declination,AstronomerId,ClusterId")] Star star)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Stars.Add(star);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                if (ModelState.IsValid)
+                {
+                    db.Stars.Add(star);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
 
-            ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", star.AstronomerId);
-            ViewBag.ClusterId = new SelectList(db.Clusters, "Id", "Name", star.ClusterId);
+                ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", star.AstronomerId);
+                ViewBag.ClusterId = new SelectList(db.Clusters, "Id", "Name", star.ClusterId);
+            }
+            catch (RetryLimitExceededException)
+            {
+                ModelState.AddModelError("", "Unable to save changes.");
+            }
+            
             return View(star);
         }
 
@@ -125,14 +140,22 @@ namespace AstronomerNotebook.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,Constellation,ApparentMagnitude,RightAscension,Declination,AstronomerId,ClusterId")] Star star)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(star).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(star).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", star.AstronomerId);
+                ViewBag.ClusterId = new SelectList(db.Clusters, "Id", "Name", star.ClusterId);
             }
-            ViewBag.AstronomerId = new SelectList(db.Astronomers, "Id", "Name", star.AstronomerId);
-            ViewBag.ClusterId = new SelectList(db.Clusters, "Id", "Name", star.ClusterId);
+            catch (RetryLimitExceededException)
+            {
+                ModelState.AddModelError("", "Unable to save changes.");
+            }
+
             return View(star);
         }
 
@@ -156,10 +179,17 @@ namespace AstronomerNotebook.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Star star = db.Stars.Find(id);
-            db.Stars.Remove(star);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                Star star = db.Stars.Find(id);
+                db.Stars.Remove(star);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (RetryLimitExceededException)
+            {
+                return RedirectToAction("Delete", new { id = id, SaveChangesError = true });
+            }
         }
 
         protected override void Dispose(bool disposing)

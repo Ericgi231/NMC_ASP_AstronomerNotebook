@@ -202,12 +202,25 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StarsController.cs" />
+    <Compile Include="DAL\UnivereseInterceptorLogging.cs.cs" />
     <Compile Include="DAL\UniverseConfiguration.cs" />
     <Compile Include="DAL\UniverseContext.cs" />
     <Compile Include="DAL\UniverseInitializer.cs" />
+    <Compile Include="DAL\UniverseInterceptorTransientErrors.cs.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Migrations\201904251650372_InitialCreate.cs" />
+    <Compile Include="Migrations\201904251650372_InitialCreate.Designer.cs">
+      <DependentUpon>201904251650372_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904251708402_InitialCreate1.cs" />
+    <Compile Include="Migrations\201904251708402_InitialCreate1.Designer.cs">
+      <DependentUpon>201904251708402_InitialCreate1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Astronomer.cs" />
     <Compile Include="Models\Cluster.cs" />
@@ -302,6 +315,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -315,6 +329,14 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201904251650372_InitialCreate.resx">
+      <DependentUpon>201904251650372_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904251708402_InitialCreate1.resx">
+      <DependentUpon>201904251708402_InitialCreate1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
